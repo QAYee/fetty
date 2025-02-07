@@ -101,6 +101,12 @@
             <h1 class="text-center mb-4" style="color: #ff0095;">World Map</h1>
             <div id="map"></div>
         </div>
+
+        <!-- Facebook Section -->
+        <div class="facebook-card p-4 p-md-5">
+            <h1 class="text-center mb-4" style="color: #ff0095;">Facebook Updates</h1>
+            <div id="facebookContainer" class="row g-4"></div>
+        </div>
     </main>
 
     <!-- Bootstrap JS Bundle -->
@@ -117,6 +123,11 @@
         // YouTube API Configuration
         const YOUTUBE_API_KEY = 'AIzaSyCBjJUR0jkmeY4hBJRPsIKsN4rqRQO7haw';
         const YOUTUBE_API_URL = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=3&order=viewCount&type=video&key=${YOUTUBE_API_KEY}`;
+
+        // Facebook API Configuration
+        const FACEBOOK_PAGE_ID = '9580993685253310';
+        const FACEBOOK_ACCESS_TOKEN = 'EAAN1ZBsObRvkBO1LJfz3ERi8IxkQvYIr0JiqP1Wq3S8OBTyigvfXPMZA4XWNrJdp1pwQAgy095ZCDRUkGLBbfKud8vZAhJlScqYZAjdccrTZC4vWqv2GW48QZA5dRFIFgPDzZCILSf1D1yIZAeVYxUI4PZCqPVmWBI7mxzq3s6JcsSGZAMmELjsDHHHVMPzH5PNXZCgL08UdXQ5yFZAOLBY2rNercfmv6fSmMrPlQJBXZAoOvgyLGbDknyp03eRJTnJrZBDoazvFpFNuNVCVj4T3AZDZD';
+        const FACEBOOK_API_URL = `https://graph.facebook.com/v12.0/${FACEBOOK_PAGE_ID}/posts?access_token=${FACEBOOK_ACCESS_TOKEN}&fields=message,created_time,full_picture,permalink_url`;
 
         // News Functions
         async function fetchNews() {
@@ -190,40 +201,54 @@
 
         // Map Functions
         function initMap() {
-            const map = L.map('map').setView([51.505, -0.09], 13);
-            
+            const map = L.map('map').setView([51.505, -0.09], 13); // Default location
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                attribution: '© OpenStreetMap contributors'
             }).addTo(map);
-
-            L.marker([14.45935, 120.96008]).addTo(map)
-                .bindPopup('St. Dominic College of Asia')
-                .openPopup();   
-
-            // Add click event listener
-            map.on('click', function(e) {
-                new L.Marker(e.latlng).addTo(map)
-                    .bindPopup(`Lat: ${e.latlng.lat.toFixed(5)}, Lng: ${e.latlng.lng.toFixed(5)}`)
-                    .openPopup();
-            });
         }
 
-        // Common Functions
-        function showError(containerId, message) {
-            const container = document.getElementById(containerId);
-            container.innerHTML = `
-                <div class="col-12">
-                    <div class="alert alert-danger">
-                        ${message}
+        // Facebook Functions
+        async function fetchFacebookPosts() {
+            try {
+                const response = await fetch(FACEBOOK_API_URL);
+                const data = await response.json();
+                console.log(data);  // Log the API response for debugging
+
+                if (data.error) {
+                    showError('facebookContainer', `Error: ${data.error.message}`);
+                } else if (data.data && data.data.length > 0) {
+                    displayFacebookPosts(data.data);
+                } else {
+                    showError('facebookContainer', 'No posts available or access denied.');
+                }
+            } catch (error) {
+                showError('facebookContainer', 'Error fetching Facebook posts');
+            }
+        }
+
+        function displayFacebookPosts(posts) {
+            const container = document.getElementById('facebookContainer');
+            container.innerHTML = posts.slice(0, 3).map(post => `
+                <div class="col-md-4">
+                    <div class="news-item">
+                        ${post.full_picture ? `<img src="${post.full_picture}" class="news-image w-100 mb-3" alt="Facebook Post">` : ''}
+                        <p class="text-muted">${post.message ? post.message.substring(0, 100) + '...' : 'No caption available'}</p>
+                        <a href="${post.permalink_url}" target="_blank" class="btn btn-sm btn-outline-primary">View Post</a>
                     </div>
                 </div>
-            `;
+            `).join('');
         }
 
-        // Initialize
+        // Show Error
+        function showError(containerId, message) {
+            document.getElementById(containerId).innerHTML = `<div class="alert alert-danger">${message}</div>`;
+        }
+
+        // Initialize all the functions
         fetchNews();
         fetchYouTubeVideos();
         initMap();
+        fetchFacebookPosts();
     </script>
 </body>
 </html>
