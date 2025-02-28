@@ -10,44 +10,85 @@
       rel="stylesheet"
     />
     <style>
+      /* Custom Navbar */
       .custom-nav {
-        background-color: #ff0095 !important;
+        background-color: #ff0000 !important;
       }
+
+      /* Artist Name Styling */
       .artist-name {
-        color: #ff0095;
+        color: #ff0000;
         text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
       }
+
+      /* Bio Card */
       .bio-card {
         background-color: #f8f9fa;
         border-radius: 15px;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
       }
+
+      /* Image Container */
       .image-container {
         overflow: hidden;
-        border-radius: 10px;
+        border-radius: 50%; /* Make the container circular */
         height: 400px;
+        width: 400px; /* Ensure the container is a square */
         position: relative;
+        margin: 0 auto; /* Center the container */
       }
+
       .slider-image {
         width: 100%;
         height: 100%;
         object-fit: cover;
-        transition: opacity 0.5s ease;
+        transition: opacity 0.5s ease-in-out;
         position: absolute;
       }
+
       @media (max-width: 768px) {
         .image-container {
           height: 300px;
+          width: 300px; /* Ensure the container is a square */
+        }
+      }
+
+      /* Particle Effect */
+      body {
+        background: #ecf3f3;
+      }
+
+      .particle {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255, 0, 0, 0.5);
+        width: 10px;
+        height: 10px;
+        animation: float 10s infinite linear;
+      }
+
+      @keyframes float {
+        0% {
+          transform: translateY(0);
+          opacity: 1;
+        }
+        50% {
+          transform: translateY(-50vh);
+          opacity: 0.5;
+        }
+        100% {
+          transform: translateY(-100vh);
+          opacity: 0;
         }
       }
     </style>
+
     <!-- FontAwesome for social icons -->
-    <script
-      src="https://kit.fontawesome.com/your-kit-code.js"
-      crossorigin="anonymous"
-    ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js"></script>
   </head>
   <body class="bg-light">
+    <div id="particle-container"></div>
+
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark custom-nav py-3">
       <div class="container">
@@ -102,25 +143,12 @@
 
       <!-- Bio Section -->
       <div class="bio-card p-4 p-md-5 mb-5">
-        <p class="lead text-muted line-height-lg">
-          Willie Junior Maxwell II (born June 7, 1991), better known by his
-          stage name Fetty Wap, is an American rapper, singer, and songwriter.
-          He quickly rose to mainstream prominence after his 2014 song "Trap
-          Queen" peaked at number two on the Billboard Hot 100 and led him to
-          sign with 300 Entertainment, an imprint of Atlantic Records. Two of
-          his 2015 singles, "679" (featuring Remy Boyz) and "My Way" (remixed
-          featuring Drake), peaked within the top ten of the chart; all three—as
-          well as the top 40 single "Again"—preceded his eponymous debut studio
-          album (2015), which peaked atop the Billboard 200. During this time,
-          he became distinctive for his melodic blending of singing and rapping,
-          lighthearted lyrics, "bouncy" production, and exclamation of various
-          catchphrases such as "1738!"<br /><br />
-
-          In 2016, he saw moderate success with his follow-up singles "Jimmy
-          Choo" and "Wake Up", and guest appeared on Fifth Harmony's single "All
-          In My Head (Flex)." His 2018 single, "Keke" (with 6ix9ine and A Boogie
-          wit da Hoodie) marked a brief resurgence and moderately entered the
-          Billboard Hot 100.
+        <p class="lead text-muted">
+          Willie Junior Maxwell II (born June 7, 1991), better known as Fetty
+          Wap, is an American rapper, singer, and songwriter. He rose to
+          prominence with "Trap Queen," which peaked at number two on the
+          Billboard Hot 100. He became known for his unique melodic rap style
+          and energetic beats.
         </p>
       </div>
     </main>
@@ -130,14 +158,30 @@
       <div class="container">
         <p class="mb-2">© 2025 Fetty Wap Fan Page. All Rights Reserved.</p>
         <p>
-          <a href="" class="text-white me-3">Privacy Policy</a>
-          <a href="" class="text-white">Terms of Service</a>
+          <a href="#" class="text-white me-3">Privacy Policy</a>
+          <a href="#" class="text-white">Terms of Service</a>
         </p>
       </div>
     </footer>
 
     <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- JavaScript for Particle Effect -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const particleContainer = document.getElementById("particle-container");
+
+        for (let i = 0; i < 30; i++) {
+          let particle = document.createElement("div");
+          particle.classList.add("particle");
+          particle.style.left = Math.random() * 100 + "vw";
+          particle.style.top = Math.random() * 100 + "vh";
+          particle.style.animationDuration = Math.random() * 5 + 5 + "s";
+          particleContainer.appendChild(particle);
+        }
+      });
+    </script>
 
     <!-- Image Slider Script -->
     <script>
@@ -151,21 +195,19 @@
       const slider = document.getElementById("mainSlider");
 
       function changeImage() {
-        // Fade out current image
-        slider.style.opacity = 0;
+        slider.style.opacity = "0";
 
         setTimeout(() => {
-          // Change image source
           currentImageIndex = (currentImageIndex + 1) % images.length;
           slider.src = images[currentImageIndex];
 
-          // Fade in new image
-          slider.style.opacity = 1;
-        }, 500); // Half of the total transition time
+          slider.onload = () => {
+            slider.style.opacity = "1";
+          };
+        }, 500);
       }
 
-      // Start the slider
-      setInterval(changeImage, 2000); // Change image every 1.5 seconds
+      setInterval(changeImage, 2000);
     </script>
   </body>
 </html>

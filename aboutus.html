@@ -11,8 +11,10 @@
     />
     <style>
       .custom-nav {
-        background: linear-gradient(135deg, #ff0095, #ff0062);
+        background: linear-gradient(135deg, #ff0000, #ff0000);
+        position: relative;
         padding: 1rem 0;
+        z-index: 3; /* Ensure the navbar is on top */
       }
 
       .nav-link {
@@ -26,15 +28,7 @@
         opacity: 0.9;
       }
 
-      .about-container {
-        max-width: 800px;
-        margin: 2rem auto;
-        padding: 2rem;
-        background: #ffffff;
-        border-radius: 15px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-      }
-
+      .about-container,
       .calendar-card {
         max-width: 800px;
         margin: 2rem auto;
@@ -42,18 +36,68 @@
         background: #ffffff;
         border-radius: 15px;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        position: relative;
+        z-index: 2;
       }
 
-      .about-title, .calendar-title {
-        color: #ff0095;
+      .about-title,
+      .calendar-title {
+        color: #ff0000;
         font-weight: bold;
         text-align: center;
       }
 
-      .about-text, .calendar-content {
+      .about-text,
+      .calendar-content {
         font-size: 1.1rem;
         color: #333;
         line-height: 1.6;
+      }
+      /* ---- particles.js container ---- */
+      #particles-js {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 1;
+        background-color: #b61924;
+        background-image: url("");
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: 50% 50%;
+      }
+      /* ---- stats.js ---- */
+      .count-particles {
+        background: #000022;
+        position: absolute;
+        top: 48px;
+        left: 0;
+        width: 80px;
+        color: #13e8e9;
+        font-size: 0.8em;
+        text-align: left;
+        text-indent: 4px;
+        line-height: 14px;
+        padding-bottom: 2px;
+        font-family: Helvetica, Arial, sans-serif;
+        font-weight: bold;
+      }
+      .js-count-particles {
+        font-size: 1.1em;
+      }
+      #stats,
+      .count-particles {
+        -webkit-user-select: none;
+        margin-top: 5px;
+        margin-left: 5px;
+      }
+      #stats {
+        border-radius: 3px 3px 0 0;
+        overflow: hidden;
+      }
+      .count-particles {
+        border-radius: 0 0 3px 3px;
       }
     </style>
   </head>
@@ -61,7 +105,7 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark custom-nav">
       <div class="container">
-        <a class="navbar-brand" href="#">Login</a>
+        <a class="navbar-brand" href="#">Fetty</a>
         <button
           class="navbar-toggler"
           type="button"
@@ -91,7 +135,7 @@
         </div>
       </div>
     </nav>
-
+    <div id="particles-js"></div>
     <!-- About Us Section -->
     <div class="container">
       <div class="about-container">
@@ -110,17 +154,22 @@
     <div class="container">
       <div class="calendar-card">
         <h1 class="calendar-title">Upcoming Events</h1>
-        <div id="calendar-content" class="calendar-content">Loading events...</div>
+        <div id="calendar-content" class="calendar-content">
+          Loading events...
+        </div>
       </div>
     </div>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="https://threejs.org/examples/js/libs/stats.min.js"></script>
     <script>
-      const apiKey = 'AIzaSyCBjJUR0jkmeY4hBJRPsIKsN4rqRQO7haw';
-      const calendarId = 'paranoid08biboy@gmail.com';
+      const apiKey = "AIzaSyCBjJUR0jkmeY4hBJRPsIKsN4rqRQO7haw";
+      const calendarId = "paranoid08biboy@gmail.com";
       const maxResults = 5;
-      const calendarContent = document.getElementById('calendar-content');
+      const calendarContent = document.getElementById("calendar-content");
 
       async function fetchCalendarEvents() {
         try {
@@ -130,19 +179,73 @@
           const data = await response.json();
 
           if (data.items && data.items.length > 0) {
-            calendarContent.innerHTML = data.items.map(event => {
-              return `<p><strong>${event.summary}</strong> - ${new Date(event.start.dateTime || event.start.date).toLocaleString()}</p>`;
-            }).join('');
+            calendarContent.innerHTML = data.items
+              .map((event) => {
+                return `<p><strong>${event.summary}</strong> - ${new Date(
+                  event.start.dateTime || event.start.date
+                ).toLocaleString()}</p>`;
+              })
+              .join("");
           } else {
-            calendarContent.innerHTML = '<p>No upcoming events.</p>';
+            calendarContent.innerHTML = "<p>No upcoming events.</p>";
           }
         } catch (error) {
-          calendarContent.innerHTML = '<p>Error fetching events.</p>';
-          console.error('Error:', error);
+          calendarContent.innerHTML = "<p>Error fetching events.</p>";
+          console.error("Error:", error);
         }
       }
 
       fetchCalendarEvents();
+      // Initialize particles.js
+      particlesJS("particles-js", {
+        particles: {
+          number: { value: 80, density: { enable: true, value_area: 800 } },
+          color: { value: "#ffffff" },
+          shape: { type: "circle", stroke: { width: 0, color: "#000000" } },
+          opacity: { value: 0.5, anim: { enable: false } },
+          size: { value: 3, random: true },
+          line_linked: {
+            enable: true,
+            distance: 150,
+            color: "#ffffff",
+            opacity: 0.4,
+            width: 1,
+          },
+          move: { enable: true, speed: 6, direction: "none" },
+        },
+        interactivity: {
+          events: {
+            onhover: { enable: true, mode: "repulse" },
+            onclick: { enable: true, mode: "push" },
+          },
+        },
+        retina_detect: true,
+      });
+
+      // Particle count statistics
+      var count_particles, stats, update;
+      stats = new Stats();
+      stats.setMode(0);
+      stats.domElement.style.position = "absolute";
+      stats.domElement.style.left = "0px";
+      stats.domElement.style.top = "0px";
+      document.body.appendChild(stats.domElement);
+
+      count_particles = document.querySelector(".js-count-particles");
+      update = function () {
+        stats.begin();
+        stats.end();
+        if (
+          window.pJSDom &&
+          window.pJSDom.length > 0 &&
+          window.pJSDom[0].pJS.particles
+        ) {
+          count_particles.innerText =
+            window.pJSDom[0].pJS.particles.array.length;
+        }
+        requestAnimationFrame(update);
+      };
+      requestAnimationFrame(update);
     </script>
   </body>
 </html>

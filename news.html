@@ -16,7 +16,7 @@
     />
     <style>
       .custom-nav {
-        background-color: #ff0095 !important;
+        background-color: #ff0000 !important;
       }
       .nav-link {
         color: #ffffff !important;
@@ -71,6 +71,33 @@
       .leaflet-container {
         background: #ffffff !important;
       }
+      .news-image {
+    object-fit: cover;
+    height: 200px; /* Ensures uniform image size */
+}
+
+.news-placeholder {
+    height: 200px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+.profile-pic {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border: 2px solid #fff;
+}
+
+
     </style>
   </head>
   <body class="bg-light">
@@ -111,35 +138,33 @@
     <main class="container my-5">
       <!-- News Section -->
       <div class="news-card p-4 p-md-5">
-        <h1 class="text-center mb-4" style="color: #ff0095">Breaking News</h1>
+        <h1 class="text-center mb-4" style="color: #ff0000">Breaking News</h1>
         <div id="newsContainer" class="row g-4"></div>
       </div>
 
       <!-- YouTube Section -->
       <div class="youtube-card p-4 p-md-5">
-        <h1 class="text-center mb-4" style="color: #ff0095">Trending Videos</h1>
+        <h1 class="text-center mb-4" style="color: #ff0000">Trending Videos</h1>
         <div id="youtubeContainer" class="row g-4"></div>
       </div>
 
       <!-- Map Section -->
       <div class="map-card p-4 p-md-5">
-        <h1 class="text-center mb-4" style="color: #ff0095">World Map</h1>
+        <h1 class="text-center mb-4" style="color: #ff0000">World Map</h1>
         <div id="map"></div>
       </div>
 
       <!-- Facebook Section -->
       <div class="facebook-card p-4 p-md-5">
-        <h1 class="text-center mb-4" style="color: #ff0095">
+        <h1 class="text-center mb-4" style="color: #ff0000">
           Facebook Updates
         </h1>
         <div id="facebookContainer" class="row g-4"></div>
       </div>
 
-      
-
       <!-- Weather Section -->
       <div class="weather-card p-4 p-md-5">
-        <h1 class="text-center mb-4" style="color: #ff0095">Weather Updates</h1>
+        <h1 class="text-center mb-4" style="color: #ff0000">Weather Updates</h1>
         <div id="weatherContainer" class="row g-4"></div>
       </div>
     </main>
@@ -162,8 +187,8 @@
       // Facebook API Configuration
       const FACEBOOK_PAGE_ID = "9580993685253310";
       const FACEBOOK_ACCESS_TOKEN =
-        "EAAN1ZBsObRvkBO8zpCMbgMUuLHEXVcwOGi4Kv7xTKI37TQ3TSQ77eCheAZCyIgyZA2tx7ZAhE2JI2HdZAI5NsQz9AVABcTJrZAlk9FR7iRkzC8D9mHTitSzCILDqRVbePR0a9GBZALZBfux61DuLQeUgTVXM24MCsSnWduhkmLhHjzMoEFMZAsGuP5GINLMzcye0L6kksz1KN88FmzTD4MKdBOMTfqOkHzod5ZAQZDZD";
-        const FACEBOOK_API_URL = `https://graph.facebook.com/v12.0/${FACEBOOK_PAGE_ID}/posts?access_token=${FACEBOOK_ACCESS_TOKEN}&fields=message,created_time,full_picture,permalink_url`;
+        "EAAN1ZBsObRvkBO2HMJbumEZBPZA1ZAPpmAhOwj8wt2zMQuJWB3ZAkCOK7ZC11bbjR6dWYNCxWMRDNYSnIjZAR3kCUb8ybjbFXNehh4SsVVfN9PdVmttdQSgWKgImP8kByQPzyIEPoAR0m3TgWzgcUC8sEZBSMcNyLwaFluv0QCheRm4dxFbO1NELFHZBqZAcMFVPgw6Ei9zmfUud4oZB83f68cMewNMzRR7FtuHAsh7ty0OJyJAUpXQPrYYoN3uDFWejR6IdWerpciPDzwZD";
+      const FACEBOOK_API_URL = `https://graph.facebook.com/v12.0/${FACEBOOK_PAGE_ID}/posts?access_token=${FACEBOOK_ACCESS_TOKEN}&fields=message,created_time,full_picture,permalink_url`;
 
       // WeatherAPI Configuration
       const WEATHER_API_KEY = "15ebbd3b4a264dcb98b144531250702";
@@ -291,56 +316,68 @@
         });
       }
 
-      // Facebook Functions
-            async function fetchFacebookPosts() {
+      // Fetch and display Facebook posts
+      async function fetchFacebookPosts() {
         try {
-            const response = await fetch(FACEBOOK_API_URL);
-            const data = await response.json();
-            console.log(data); // Log the API response for debugging
+          const response = await fetch(FACEBOOK_API_URL);
+          const data = await response.json();
+          console.log(data); // Debugging output
 
-            if (data.error) {
+          if (data.error) {
             showError("facebookContainer", `Error: ${data.error.message}`);
-            } else if (data.data && data.data.length > 0) {
-            displayFacebookPosts(data.data);
-            } else {
-            showError("facebookContainer", "No posts available or access denied.");
-            }
-        } catch (error) {
-            showError("facebookContainer", "Error fetching Facebook posts");
-        }
-        }
+            return;
+          }
 
-            function displayFacebookPosts(posts) {
-        const container = document.getElementById("facebookContainer");
-        if (posts.length > 0) {
-        container.innerHTML = posts
-            .slice(0, 3)
-            .map(
-            (post) => `
-                <div class="col-md-4">
-                    <div class="news-item">
-                        ${
-                            post.full_picture
-                            ? `<img src="${post.full_picture}" class="news-image w-100 mb-3" alt="Facebook Post">`
-                            : ""
-                        }
-                        <p class="text-muted">${
-                            post.message
-                            ? post.message.substring(0, 100) + "..."
-                            : "No caption available"
-                        }</p>
-                        <a href="${
-                            post.permalink_url
-                        }" target="_blank" class="btn btn-sm btn-outline-primary">View Post</a>
+          if (!data.data || data.data.length === 0) {
+            showError(
+              "facebookContainer",
+              "No posts available or access denied."
+            );
+            return;
+          }
+
+          displayFacebookPosts(data.data);
+        } catch (error) {
+          showError("facebookContainer", "Error fetching Facebook posts.");
+        }
+      }
+
+      // Display Facebook posts in a structured format
+      function displayFacebookPosts(posts) {
+    const container = document.getElementById("facebookContainer");
+    container.innerHTML = posts
+        .slice(0, 3)
+        .map(post => `
+            <div class="fb-post card bg-dark text-white shadow-sm border-0">
+                <div class="card-header d-flex align-items-center">
+                    <img src="${post.from?.picture?.data?.url || 'default-profile.png'}" 
+                         class="profile-pic rounded-circle me-2" alt="Profile">
+                    <div>
+                        <strong class="username">${post.from?.name || "Facebook User"}</strong><br>
+                        <small class="text-muted">${new Date(post.created_time).toLocaleDateString()}</small>
                     </div>
                 </div>
-            `
-            )
-            .join("");
-        } else {
-        container.innerHTML = `<div class="alert alert-info">No recent posts available.</div>`;
-        }
-        }
+                <div class="card-body">
+                    <p class="post-text">${post.message ? post.message : "No caption available"}</p>
+                    ${post.full_picture 
+                        ? `<img src="${post.full_picture}" class="post-image w-100 rounded" alt="Post Image">` 
+                        : ""}
+                </div>
+                <div class="card-footer">
+                    <a href="${post.permalink_url}" target="_blank" class="btn btn-sm btn-primary">View Post</a>
+                </div>
+            </div>
+        `).join("");
+}
+
+
+
+// Display error messages gracefully
+function showError(containerId, message) {
+    document.getElementById(containerId).innerHTML = 
+        `<div class="alert alert-danger">${message}</div>`;
+}
+
 
       // Weather Functions
       async function fetchWeather() {

@@ -1,109 +1,241 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login Page</title>
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
     <style>
-        .custom-nav {
-            background: linear-gradient(135deg, #ff0095, #ff0062);
-            padding: 1rem 0;
-        }
-        
-        .nav-link {
-            color: #ffffff !important;
-            transition: all 0.3s ease;
-            font-weight: 500;
-        }
-        
-        .nav-link:hover {
-            transform: translateY(-2px);
-            opacity: 0.9;
-        }
-        
-        .login-container {
-            max-width: 500px;
-            margin: 2rem auto;
-            padding: 2rem;
-            background: #ffffff;
-            border-radius: 15px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-        }
-        
-        .login-input {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            transition: border-color 0.3s ease;
-        }
-        
-        .login-input:focus {
-            border-color: #ff0095;
-            outline: none;
-        }
-        
-        .login-btn {
-            background: #ff0095;
-            color: white;
-            padding: 12px 30px;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-        
-        .login-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(255,0,149,0.3);
-        }
-        
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
+      .custom-nav {
+        background: linear-gradient(135deg, #ff0000, #ff0000);
+        padding: 1rem 0;
+        position: relative;
+        z-index: 3; /* Ensure the navbar is on top */
+      }
+
+      .nav-link {
+        color: #ffffff !important;
+        transition: all 0.3s ease;
+        font-weight: 500;
+      }
+
+      .nav-link:hover {
+        transform: translateY(-2px);
+        opacity: 0.9;
+      }
+
+      .login-container {
+        max-width: 500px;
+        margin: 2rem auto;
+        padding: 2rem;
+        background: #ffffff;
+        border-radius: 15px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        position: relative;
+        z-index: 2;
+      }
+
+      .login-input {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        transition: border-color 0.3s ease;
+      }
+
+      .login-input:focus {
+        border-color: #ff0000;
+        outline: none;
+      }
+
+      .login-btn {
+        background: #ff0000;
+        color: white;
+        padding: 12px 30px;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+
+      .login-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(255, 0, 149, 0.3);
+      }
+
+      .form-group {
+        margin-bottom: 1.5rem;
+      }
+      /* ---- particles.js container ---- */
+      #particles-js {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 1;
+        background-color: #b61924;
+        background-image: url("");
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: 50% 50%;
+      }
+      /* ---- stats.js ---- */
+      .count-particles {
+        background: #000022;
+        position: absolute;
+        top: 48px;
+        left: 0;
+        width: 80px;
+        color: #13e8e9;
+        font-size: 0.8em;
+        text-align: left;
+        text-indent: 4px;
+        line-height: 14px;
+        padding-bottom: 2px;
+        font-family: Helvetica, Arial, sans-serif;
+        font-weight: bold;
+      }
+      .js-count-particles {
+        font-size: 1.1em;
+      }
+      #stats,
+      .count-particles {
+        -webkit-user-select: none;
+        margin-top: 5px;
+        margin-left: 5px;
+      }
+      #stats {
+        border-radius: 3px 3px 0 0;
+        overflow: hidden;
+      }
+      .count-particles {
+        border-radius: 0 0 3px 3px;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark custom-nav">
-        <div class="container">
-            <a class="navbar-brand" href="#">Website</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="news.html">News</a></li>
-                    <li class="nav-item"><a class="nav-link" href="gallery.html">Gallery</a></li>
-                    <li class="nav-item"><a class="nav-link" href="aboutus.html">About Us</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="login.html">Login</a></li>
-                </ul>
-            </div>
+      <div class="container">
+        <a class="navbar-brand" href="#">Website</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="news.html">News</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="gallery.html">Gallery</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="aboutus.html">About Us</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="login.html">Login</a>
+            </li>
+          </ul>
         </div>
+      </div>
     </nav>
-
+    <div id="particles-js"></div>
     <!-- Login Form -->
     <div class="container">
-        <div class="login-container">
-            <h1 class="text-center mb-4" style="color: #ff0095;">Welcome Back</h1>
-            <div class="form-group">
-                <label class="form-label">Username</label>
-                <input type="text" class="login-input" placeholder="Enter your username">
-            </div>
-            <div class="form-group">
-                <label class="form-label">Password</label>
-                <input type="password" class="login-input" placeholder="Enter your password">
-            </div>
-            <div class="d-grid gap-2">
-                <button class="login-btn">Login</button>
-            </div>
+      <div class="login-container">
+        <h1 class="text-center mb-4" style="color: #ff0000">Welcome Back</h1>
+        <div class="form-group">
+          <label class="form-label">Username</label>
+          <input
+            type="text"
+            class="login-input"
+            placeholder="Enter your username"
+          />
         </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input
+            type="password"
+            class="login-input"
+            placeholder="Enter your password"
+          />
+        </div>
+        <div class="d-grid gap-2">
+          <button class="login-btn">Login</button>
+        </div>
+      </div>
     </div>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="https://threejs.org/examples/js/libs/stats.min.js"></script>
+    <script>
+      // Initialize particles.js
+      particlesJS("particles-js", {
+        particles: {
+          number: { value: 80, density: { enable: true, value_area: 800 } },
+          color: { value: "#ffffff" },
+          shape: { type: "circle", stroke: { width: 0, color: "#000000" } },
+          opacity: { value: 0.5, anim: { enable: false } },
+          size: { value: 3, random: true },
+          line_linked: {
+            enable: true,
+            distance: 150,
+            color: "#ffffff",
+            opacity: 0.4,
+            width: 1,
+          },
+          move: { enable: true, speed: 6, direction: "none" },
+        },
+        interactivity: {
+          events: {
+            onhover: { enable: true, mode: "repulse" },
+            onclick: { enable: true, mode: "push" },
+          },
+        },
+        retina_detect: true,
+      });
+
+      // Particle count statistics
+      var count_particles, stats, update;
+      stats = new Stats();
+      stats.setMode(0);
+      stats.domElement.style.position = "absolute";
+      stats.domElement.style.left = "0px";
+      stats.domElement.style.top = "0px";
+      document.body.appendChild(stats.domElement);
+
+      count_particles = document.querySelector(".js-count-particles");
+      update = function () {
+        stats.begin();
+        stats.end();
+        if (
+          window.pJSDom &&
+          window.pJSDom.length > 0 &&
+          window.pJSDom[0].pJS.particles
+        ) {
+          count_particles.innerText =
+            window.pJSDom[0].pJS.particles.array.length;
+        }
+        requestAnimationFrame(update);
+      };
+      requestAnimationFrame(update);
+    </script>
+  </body>
 </html>
